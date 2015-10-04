@@ -46,5 +46,9 @@
   },
   "peerDependencies": {
     "core-js": "^0.6.0"
+  },
+  "dependencies": {
+    "lodash.flatten": "^3.0.2",
+    "lodash.uniq": "^3.2.2"
   }
 }

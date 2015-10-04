@@ -1,3 +1,6 @@
+import flatten from 'lodash.flatten'
+import uniq from 'lodash.uniq'
+
 function proxyTriggerSingle (sourceEmitter, targetEmitter, event) {
   targetEmitter.listenTo(sourceEmitter, event, (...args) => {
     targetEmitter.trigger(event, ...args)
@@ -5,7 +8,10 @@ function proxyTriggerSingle (sourceEmitter, targetEmitter, event) {
 }
 
 export default function proxyTrigger (sourceEmitter, targetEmitter, events) {
-  events.split(/\s+/).forEach((event) => {
+  let eventList = Array.isArray(events) ? events : [events]
+
+  eventList = uniq(flatten(eventList.map(event => event.trim().split(/\s+/))))
+  eventList.forEach((event) => {
     proxyTriggerSingle(sourceEmitter, targetEmitter, event)
   })
 }
