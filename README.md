@@ -4,6 +4,10 @@
 
 Proxies [ampersand-events](http://ampersandjs.com/docs#ampersand-events) or [Backbone.Events](http://backbonejs.org/#Events) from one emitter to another.
 
+**A note about compatibility**
+
+The [npm package](https://www.npmjs.com/package/proxy-trigger) should be used in an ES6 environment. Even though the published code has ES5 syntax you have to make sure to use ES5 and ES6 polyfills if you are in an ancient environment. That's why I added [core-js](https://www.npmjs.com/package/core-js) as a peer dependency.
+
 ## Install
 
 ```sh
