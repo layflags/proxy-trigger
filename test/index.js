@@ -25,21 +25,32 @@ function fooBarBaz (events, t) {
 }
 
 test('it throws an error if `sourceEmitter` is no emitter', (t) => {
-  const emitter = Events.createEmitter()
-
   t.plan(3)
-  t.throws(() => proxyTrigger({}, emitter, 'foo'), /source.+no.+emitter/)
-  t.throws(() => proxyTrigger(null, emitter, 'foo'), /source.+no.+emitter/)
-  t.throws(() => proxyTrigger('emitter', emitter, 'foo'), /source.+no.+emitter/)
+  setup((source, target) => {
+    t.throws(() => proxyTrigger({}, target, 'foo'), /source.+no.+emitter/)
+    t.throws(() => proxyTrigger(null, target, 'foo'), /source.+no.+emitter/)
+    t.throws(() => proxyTrigger('emitter', target, 'foo'), /source.+no.+emitter/)
+  })
 })
 
 test('it throws an error if `targetEmitter` is no emitter', (t) => {
-  const emitter = Events.createEmitter()
-
   t.plan(3)
-  t.throws(() => proxyTrigger(emitter, {}, 'foo'), /target.+no.+emitter/)
-  t.throws(() => proxyTrigger(emitter, null, 'foo'), /target.+no.+emitter/)
-  t.throws(() => proxyTrigger(emitter, 'emitter', 'foo'), /target.+no.+emitter/)
+  setup((source) => {
+    t.throws(() => proxyTrigger(source, {}, 'foo'), /target.+no.+emitter/)
+    t.throws(() => proxyTrigger(source, null, 'foo'), /target.+no.+emitter/)
+    t.throws(() => proxyTrigger(source, 'emitter', 'foo'), /target.+no.+emitter/)
+  })
+})
+
+test('it throws an error if type of `events` is invalid', (t) => {
+  t.plan(5)
+  setup((source, target) => {
+    t.throws(() => proxyTrigger(source, target, {}), /type.+events.+invalid/)
+    t.throws(() => proxyTrigger(source, target, null), /type.+events.+invalid/)
+    t.throws(() => proxyTrigger(source, target, 1), /type.+events.+invalid/)
+    t.throws(() => proxyTrigger(source, target, /.*/), /type.+events.+invalid/)
+    t.throws(() => proxyTrigger(source, target), /type.+events.+invalid/)
+  })
 })
 
 test('it proxies a single event with all arguments', (t) => {
