@@ -49,7 +49,9 @@
     "core-js": "^0.6.0"
   },
   "dependencies": {
+    "implements": "^0.1.0",
     "lodash.flatten": "^3.0.2",
+    "lodash.isobject": "^3.0.2",
     "lodash.uniq": "^3.2.2"
   }
 }

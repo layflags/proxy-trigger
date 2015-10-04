@@ -24,6 +24,24 @@ function fooBarBaz (events, t) {
   })
 }
 
+test('it throws an error if `sourceEmitter` is no emitter', (t) => {
+  const emitter = Events.createEmitter()
+
+  t.plan(3)
+  t.throws(() => proxyTrigger({}, emitter, 'foo'), /source.+no.+emitter/)
+  t.throws(() => proxyTrigger(null, emitter, 'foo'), /source.+no.+emitter/)
+  t.throws(() => proxyTrigger('emitter', emitter, 'foo'), /source.+no.+emitter/)
+})
+
+test('it throws an error if `targetEmitter` is no emitter', (t) => {
+  const emitter = Events.createEmitter()
+
+  t.plan(3)
+  t.throws(() => proxyTrigger(emitter, {}, 'foo'), /target.+no.+emitter/)
+  t.throws(() => proxyTrigger(emitter, null, 'foo'), /target.+no.+emitter/)
+  t.throws(() => proxyTrigger(emitter, 'emitter', 'foo'), /target.+no.+emitter/)
+})
+
 test('it proxies a single event with all arguments', (t) => {
   t.plan(1)
   setup((sourceEmitter, targetEmitter) => {
