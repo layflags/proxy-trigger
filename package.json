@@ -1,0 +1,50 @@
+{
+  "name": "proxy-trigger",
+  "version": "0.1.0",
+  "description": "Proxies events from one emitter to another.",
+  "main": "dist/proxy-trigger.js",
+  "watch": {
+    "test": "{src,test}/*.js"
+  },
+  "scripts": {
+    "test": "babel-node test",
+    "lint": "standard",
+    "watch": "npm-watch",
+    "compile": "babel -d dist/ src/",
+    "prepublish": "npm run compile"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/layflags/proxy-trigger.git"
+  },
+  "keywords": [
+    "proxy",
+    "events",
+    "event",
+    "forward",
+    "trigger",
+    "ampersand",
+    "backbone"
+  ],
+  "author": "Lay Flags <code@layfla.gs>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/layflags/proxy-trigger/issues"
+  },
+  "homepage": "https://github.com/layflags/proxy-trigger#readme",
+  "devDependencies": {
+    "ampersand-events": "^1.1.1",
+    "babel": "^5.8.23",
+    "npm-watch": "0.0.1",
+    "pre-commit": "^1.1.1",
+    "standard": "^5.3.1",
+    "tape": "^4.2.0"
+  },
+  "peerDependencies": {
+    "core-js": "^0.6.0"
+  }
+}

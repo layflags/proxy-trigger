@@ -2,7 +2,7 @@
 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-Proxies [ampersand-events](http://ampersandjs.com/docs#ampersand-events) or [Backbone.Events](http://backbonejs.org/#Events) from one *Event Emitter* to another.
+Proxies [ampersand-events](http://ampersandjs.com/docs#ampersand-events) or [Backbone.Events](http://backbonejs.org/#Events) from one emitter to another.
 
 ## Install
 
@@ -23,6 +23,8 @@ sourceEmitter.trigger('change:title')
 
 // proxy multiple events with a space-separated string
 proxyTrigger(sourceEmitter, targetEmitter, 'open close')
+
+// coming soon ...
 
 // proxy multiple events with an array of strings
 proxyTrigger(sourceEmitter, targetEmitter, ['open', 'close'])
