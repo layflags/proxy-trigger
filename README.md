@@ -52,20 +52,6 @@ export default View.extend(proxyTriggerMixin, {
 })
 ```
 
-or using *ES5* and *require*:
-
-```javascript
-var proxyTriggerMixin = require('proxy-trigger').mixin
-var View = require('ampersand-view')
-
-module.exports = View.extend(proxyTriggerMixin, {
-  initialize: function () {
-    this.proxyTrigger(this.someSubView, 'close')
-  },
-  ...
-})
-```
-
 ## Test
 
 ```sh

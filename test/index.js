@@ -26,7 +26,7 @@ test('it proxies a single event', (t) => {
   })
 })
 
-test('it proxies multiple event with a space-separated string', (t) => {
+test('it proxies multiple events with a space-separated string', (t) => {
   setup((sourceEmitter, targetEmitter) => {
     t.plan(3)
 
