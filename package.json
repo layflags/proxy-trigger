@@ -28,7 +28,8 @@
     "forward",
     "trigger",
     "ampersand",
-    "backbone"
+    "backbone",
+    "mixin"
   ],
   "author": "Lay Flags <code@layfla.gs>",
   "license": "MIT",
