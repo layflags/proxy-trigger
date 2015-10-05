@@ -19,6 +19,14 @@ npm install proxy-trigger
 ```javascript
 import proxyTrigger from 'proxy-trigger'
 
+// proxy all events by default
+proxyTrigger(sourceEmitter, targetEmitter)
+targetEmitter.on('foo bar', (msg) => console.log(msg))
+sourceEmitter.trigger('foo', 'proxied foo')
+sourceEmitter.trigger('bar', 'proxied bar')
+// -> proxied foo
+// -> proxied bar
+
 // proxy a single event
 proxyTrigger(sourceEmitter, targetEmitter, 'change:title')
 targetEmitter.on('change:title', () => console.log('title changed'))

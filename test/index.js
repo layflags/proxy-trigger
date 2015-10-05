@@ -17,19 +17,19 @@ function setup (cb) {
 function fooBarBaz (events, t) {
   setup((sourceEmitter, targetEmitter) => {
     proxyTrigger(sourceEmitter, targetEmitter, events)
-    targetEmitter.on('foo', (info) => t.pass(info))
-    targetEmitter.on('bar', (info) => t.pass(info))
-    targetEmitter.on('baz', (info) => t.pass(info))
-    sourceEmitter.trigger('foo', 'proxied foo')
-    sourceEmitter.trigger('bar', 'proxied bar')
-    sourceEmitter.trigger('baz', 'proxied baz')
+    ;['foo', 'bar', 'baz'].forEach((evt) => {
+      const msg = `proxied ${evt}`
+
+      targetEmitter.on(evt, (param) => t.equal(param, msg))
+      sourceEmitter.trigger(evt, msg)
+    })
   })
 }
 
 test('it throws an error if `sourceEmitter` is no emitter', (t) => {
   t.plan(3)
   setup((source, target) => {
-    [{}, null, 'emitter'].forEach((invalid) => {
+    ;[{}, null, 'emitter'].forEach((invalid) => {
       t.throws(() => proxyTrigger(invalid, target, 'foo'), /source.+no.+emitter/)
     })
   })
@@ -38,7 +38,7 @@ test('it throws an error if `sourceEmitter` is no emitter', (t) => {
 test('it throws an error if `targetEmitter` is no emitter', (t) => {
   t.plan(3)
   setup((source) => {
-    [{}, null, 'emitter'].forEach((invalid) => {
+    ;[{}, null, 'emitter'].forEach((invalid) => {
       t.throws(() => proxyTrigger(source, invalid, 'foo'), /target.+no.+emitter/)
     })
   })
@@ -47,7 +47,7 @@ test('it throws an error if `targetEmitter` is no emitter', (t) => {
 test('it throws an error if `events` has an invalid format', (t) => {
   t.plan(16)
   setup((source, target) => {
-    [
+    ;[
       '', null, 1, /.*/,
       [''], [null], [1], [/.*/],
       {bad1: ''}, {bad2: null}, {bad3: 1}, {bad4: /.*/},
@@ -56,6 +56,12 @@ test('it throws an error if `events` has an invalid format', (t) => {
       t.throws(() => proxyTrigger(source, target, invalid), /events.+invalid/)
     })
   })
+})
+
+test('it proxies all events by default', (t) => {
+  t.plan(6)
+  fooBarBaz(undefined, t)
+  fooBarBaz('all', t)
 })
 
 test('it proxies a single event with all arguments', (t) => {
@@ -74,6 +80,7 @@ test('it proxies multiple events with a space-separated string', (t) => {
   fooBarBaz('foo bar   baz', t)
   fooBarBaz('  foo bar baz', t)
   fooBarBaz('foo bar baz  ', t)
+  fooBarBaz('do not proxy', t)
 })
 
 test('it proxies multiple events with an array of strings', (t) => {
@@ -111,8 +118,8 @@ test('it proxies events with name mapping using object notation', (t) => {
 
 test('it even proxies events with name mapping if map is part of array', (t) => {
   t.plan(6)
-  fooBarBaz([{foo: 'bar', bar: 'baz', baz: 'foo'}], t)
-  fooBarBaz([{foo: 'bar'}, {bar: 'baz'}, {baz: 'foo'}], t)
+  fooBarBaz([{foo: 'foo', bar: 'bar', baz: 'baz'}], t)
+  fooBarBaz([{foo: 'foo'}, {bar: 'bar'}, {baz: 'baz'}], t)
 })
 
 test('it proxies multiple events once even if defined twice', (t) => {

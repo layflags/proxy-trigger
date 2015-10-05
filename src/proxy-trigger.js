@@ -16,9 +16,17 @@ function proxyTriggerSingle (srcEmitter, targetEmitter, origEvent, newEvent) {
   })
 }
 
-export default function proxyTrigger (sourceEmitter, targetEmitter, events) {
+function proxyTriggerAll (srcEmitter, targetEmitter) {
+  targetEmitter.listenTo(srcEmitter, 'all', (event, ...args) => {
+    targetEmitter.trigger(event, ...args)
+  })
+}
+
+function proxyTrigger (sourceEmitter, targetEmitter, events = 'all') {
   if (!isEmitter(sourceEmitter)) throw new Error('source is not an emitter')
   if (!isEmitter(targetEmitter)) throw new Error('target is not an emitter')
+
+  if (events === 'all') return proxyTriggerAll(sourceEmitter, targetEmitter)
 
   const eventList = Array.isArray(events) ? events : [events]
   const eventMap = new Map()
@@ -48,6 +56,7 @@ export default function proxyTrigger (sourceEmitter, targetEmitter, events) {
   })
 }
 
+export default proxyTrigger
 export const mixin = Object.freeze({
   proxyTrigger (sourceEmitter, events) {
     proxyTrigger(sourceEmitter, this, events)
