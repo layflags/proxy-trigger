@@ -31,7 +31,7 @@ export default function proxyTrigger (sourceEmitter, targetEmitter, events) {
     }
   })
 
-  eventMap.forEach((origEvent, newEvent) => {
+  eventMap.forEach((newEvent, origEvent) => {
     proxyTriggerSingle(sourceEmitter, targetEmitter, origEvent, newEvent)
   })
 }
