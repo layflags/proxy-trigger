@@ -4,10 +4,9 @@ import isString from 'lodash.isstring'
 import impl from 'implements'
 
 const eventsFormatInvalidError = new Error('events format is invalid')
+const emitterInterface = ['trigger', 'listenTo', 'on', 'off', 'stopListening']
 
 function isEmitter (emitter) {
-  const emitterInterface = ['trigger', 'listenTo', 'on', 'off', 'stopListening']
-
   return isObject(emitter) && impl(emitter, emitterInterface)
 }
 
