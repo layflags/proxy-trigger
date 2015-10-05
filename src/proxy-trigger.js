@@ -1,6 +1,9 @@
 import isObject from 'lodash.isobject'
+import isPlainObject from 'lodash.isplainobject'
 import isString from 'lodash.isstring'
 import impl from 'implements'
+
+const eventsFormatInvalidError = new Error('events format is invalid')
 
 function isEmitter (emitter) {
   const emitterInterface = ['trigger', 'listenTo', 'on', 'off', 'stopListening']
@@ -21,13 +24,23 @@ export default function proxyTrigger (sourceEmitter, targetEmitter, events) {
   const eventList = Array.isArray(events) ? events : [events]
   const eventMap = new Map()
 
-  eventList.forEach((event) => {
-    if (isString(event)) {
-      event.trim().split(/\s+/).forEach((evt) => {
-        if (evt !== '') eventMap.set(evt, evt)
+  eventList.forEach((eventish) => {
+    if (isString(eventish)) {
+      eventish.trim().split(/\s+/).forEach((event) => {
+        if (event === '') throw eventsFormatInvalidError
+        eventMap.set(event, event)
+      })
+    } else if (isPlainObject(eventish)) {
+      Object.keys(eventish).forEach((origEvent) => {
+        const newEvent = eventish[origEvent]
+
+        if (!isString(newEvent) || newEvent.trim() === '') {
+          throw eventsFormatInvalidError
+        }
+        eventMap.set(origEvent, newEvent)
       })
     } else {
-      throw new Error('events format is invalid')
+      throw eventsFormatInvalidError
     }
   })
 

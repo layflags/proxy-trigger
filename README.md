@@ -31,8 +31,6 @@ proxyTrigger(sourceEmitter, targetEmitter, 'open close')
 // proxy multiple events with an array of strings
 proxyTrigger(sourceEmitter, targetEmitter, ['open', 'close'])
 
-// coming soon ...
-
 // proxy events with name mapping using object notation
 proxyTrigger(sourceEmitter, targetEmitter, {'change:title': 'change:source.title'})
 

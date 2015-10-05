@@ -17,7 +17,9 @@ function setup (cb) {
 function fooBarBaz (events, t) {
   setup((sourceEmitter, targetEmitter) => {
     proxyTrigger(sourceEmitter, targetEmitter, events)
-    targetEmitter.on('foo bar baz', (info) => t.ok(true, info))
+    targetEmitter.on('foo', (info) => t.pass(info))
+    targetEmitter.on('bar', (info) => t.pass(info))
+    targetEmitter.on('baz', (info) => t.pass(info))
     sourceEmitter.trigger('foo', 'proxied foo')
     sourceEmitter.trigger('bar', 'proxied bar')
     sourceEmitter.trigger('baz', 'proxied baz')
@@ -42,10 +44,10 @@ test('it throws an error if `targetEmitter` is no emitter', (t) => {
   })
 })
 
-test('it throws an error if type of `events` is invalid', (t) => {
+test('it throws an error if `events` has an invalid format', (t) => {
   t.plan(5)
   setup((source, target) => {
-    [{}, null, 1, /.*/, undefined].forEach((invalid) => {
+    ['', null, 1, /.*/, undefined].forEach((invalid) => {
       t.throws(() => proxyTrigger(source, target, invalid), /events.+invalid/)
     })
   })
@@ -80,10 +82,38 @@ test('it proxies multiple events with an array of (space-separated) strings', (t
   fooBarBaz(['foo', 'bar baz'], t)
 })
 
+test('it proxies events with name mapping using object notation', (t) => {
+  t.plan(3)
+  setup((sourceEmitter, targetEmitter) => {
+    proxyTrigger(sourceEmitter, targetEmitter, {
+      foo: 'target.foo',
+      bar: 'barrr',
+      baz: 'baz'
+    })
+
+    targetEmitter.on('foo', () => t.fail('not proxied foo'))
+    targetEmitter.on('bar', () => t.fail('not proxied bar'))
+
+    targetEmitter.on('target.foo', (info) => t.pass(info))
+    targetEmitter.on('barrr', (info) => t.pass(info))
+    targetEmitter.on('baz', (info) => t.pass(info))
+
+    sourceEmitter.trigger('foo', 'proxied target.foo')
+    sourceEmitter.trigger('bar', 'proxied barrr')
+    sourceEmitter.trigger('baz', 'proxied baz')
+  })
+})
+
+test('it even proxies events with name mapping if map is part of array', (t) => {
+  t.plan(6)
+  fooBarBaz([{foo: 'bar', bar: 'baz', baz: 'foo'}], t)
+  fooBarBaz([{foo: 'bar'}, {bar: 'baz'}, {baz: 'foo'}], t)
+})
+
 test('it proxies multiple events once even if defined twice', (t) => {
   t.plan(9)
   fooBarBaz('foo foo bar foo baz', t)
-  fooBarBaz(['foo', 'bar', 'foo', 'foo baz'], t)
+  fooBarBaz(['foo', 'bar', {foo: 'foo'}, {foo: 'foo'}, 'foo baz'], t)
   fooBarBaz(['foo bar foo', 'foo', 'baz'], t)
 })
 
@@ -92,7 +122,7 @@ test('it can be used as a mixin', (t) => {
   setup((sourceEmitter, targetEmitter) => {
     Object.assign(targetEmitter, proxyTriggerMixin)
     targetEmitter.proxyTrigger(sourceEmitter, 'foo')
-    targetEmitter.on('foo', () => t.ok(true, 'proxied'))
+    targetEmitter.on('foo', () => t.pass('proxied'))
     sourceEmitter.trigger('foo')
   })
 })
