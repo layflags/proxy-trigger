@@ -45,9 +45,14 @@ test('it throws an error if `targetEmitter` is no emitter', (t) => {
 })
 
 test('it throws an error if `events` has an invalid format', (t) => {
-  t.plan(5)
+  t.plan(16)
   setup((source, target) => {
-    ['', null, 1, /.*/, undefined].forEach((invalid) => {
+    [
+      '', null, 1, /.*/,
+      [''], [null], [1], [/.*/],
+      {bad1: ''}, {bad2: null}, {bad3: 1}, {bad4: /.*/},
+      [{bad1: ''}], [{bad2: null}], [{bad3: 1}], [{bad4: /.*/}]
+    ].forEach((invalid) => {
       t.throws(() => proxyTrigger(source, target, invalid), /events.+invalid/)
     })
   })
