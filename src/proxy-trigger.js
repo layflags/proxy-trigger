@@ -62,4 +62,3 @@ export const mixin = Object.freeze({
     proxyTrigger(sourceEmitter, this, events)
   }
 })
-

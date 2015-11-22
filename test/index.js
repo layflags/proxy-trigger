@@ -138,4 +138,3 @@ test('it can be used as a mixin', (t) => {
     sourceEmitter.trigger('foo')
   })
 })
-
