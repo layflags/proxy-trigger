@@ -1,6 +1,6 @@
 {
   "name": "proxy-trigger",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Proxies events from one emitter to another.",
   "main": "dist/proxy-trigger.js",
   "watch": {
