@@ -13,6 +13,10 @@
     "compile": "babel -d dist/ src/",
     "prepublish": "npm run compile"
   },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
   "pre-commit": [
     "lint",
     "test"
